@@ -1,0 +1,46 @@
+<script>
+	require.config({
+		paths: {
+	      fb: "/scripts/form-builder-scripts/js"
+	    }
+	});
+</script>
+
+<script id="rem-chars-template" type="x-handlebars-template">
+	<div id="rem-chars" class="alerttext" style="color: #333; float: left; text-align: left;"></div>
+</script>
+
+<script>
+  var userdcid = ~[x:users_dcid];
+  angular.element(document).ready(function() {
+    scope = angular.element(document).scope();
+
+    scope.$watch('formContent.title', function(title) {
+      if(title === 'IEP: SpEd 6a1') {
+        require(["fb/form6a1"], function(form6a1) {
+          form6a1();
+        });
+      }
+
+      if (title === 'IEP: SpEd 51') {
+      	require(["fb/form51"], function(form51) {
+      		form51();
+      	});
+      }
+
+      if (title.indexOf('IEP:') > -1) {
+        require(["fb/iep"], function(iep) {
+          iep();
+        });
+      }
+    });
+
+		require(["fb/charcount"], function(charcount) {
+			charcount();
+		});
+  });
+</script>
+
+<style>
+	.element #rem-chars.alerttext { color: #333; float: none; text-align: left; }
+</style>
