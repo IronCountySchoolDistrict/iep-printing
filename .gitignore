@@ -2,5 +2,4 @@
 /vendor/
 /node_modules/
 composer.lock
-config.json
 .DS_Store

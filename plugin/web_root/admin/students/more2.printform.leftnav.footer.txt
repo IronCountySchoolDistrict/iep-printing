@@ -1,7 +1,10 @@
 <script>
 
   require(['jquery'], function($) {
-    $('#std_information a:contains(Forms)').parent().after('<li><a href="iepprinting/index.html?frn=~(studentfrn)">IEP Printing</a></li>');
+    $('#std_information a:contains(Forms)').parent().after(
+      '<li><a href="iep/index.html?frn=~(studentfrn)">IEP Management</a></li>' +
+      '<li><a href="five-o-four/index.html?frn=~(studentfrn)">504 Printing</a></li>'
+    );
   });
 
 </script>
