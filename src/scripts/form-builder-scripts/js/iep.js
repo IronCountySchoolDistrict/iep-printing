@@ -91,33 +91,6 @@ define(['jquery'], function($) {
     setTimeout(setFormToReadOnly, 1500);
   }
 
-  var responseUpdated = function(oldId, newId, newScope) {
-    if (oldId !== newId && newId && newId !== "") {
-      params.iepResponse = newScope.formContent.response.id;
-      params.responseid = newScope.formContent.response.id;
-
-      window.fetch(API_BASE_URL + 'iep/attach', {
-        method: 'POST',
-        body: JSON.stringify({
-          frn: params.frn,
-          iep: params.iep,
-          responseid: params.responseid,
-          userdcid: userdcid
-        })
-      }).then(status)
-        .then(function() {
-          var urlParams = [
-            'formid=' + params.formid,
-            'type=' + params.type,
-            'responseid=' + params.responseid,
-            'iep=' + params.iep,
-            'frn=' + params.frn
-          ];
-          window.location.replace('/admin/formbuilder/students/studentform.html?' + urlParams.join('&'));
-        });
-    }
-  }
-
   function init() {
     var urlParams = ['iep=' + params.iep, 'frn=' + params.frn];
     window.fetch(API_BASE_URL + 'iep/data?' + urlParams.join('&'))
@@ -125,38 +98,46 @@ define(['jquery'], function($) {
       .then(json)
       .then(function(response) {
         iep = response;
-        console.log(iep);
+
         if (shouldBeReadOnly()) {
           setFormToReadOnly();
         }
 
-        if (scope.formContent.title === "IEP: SpEd 51") {
-          fieldSelector = '.pdf_sped-teacher';
-          watchSubmit();
-        }
-
-        if (scope.formContent.title === "IEP: SpEd 6a1") {
-          fieldSelector = '.pdf_date';
-          watchSubmit();
-        }
+        watchSubmit();
       });
   }
 
   function watchSubmit() {
-    if ($('#alert_msg').is(':visible') && !isSaving) {
+    if ($('#alert_msg').is(':visible') && !isSaving && $('#alert_msg').hasClass('feedback-confirm')) {
       isSaving = true;
       var body = {
-        frn: params.frn,
+        studentid: params.subjectid,
         iep: iep.id,
-        field: fieldSelector,
-        value: getResponseValue(fieldSelector.substring(1))
+        formid: params.formid,
+        userdcid: userdcid,
+        responseid: params.iepResponse
       };
       console.log(body);
 
       window.fetch(API_BASE_URL + 'iep/update', {
         method: 'post',
         body: JSON.stringify(body)
-      }).then(function() {
+      }).then(status)
+        .then(json)
+        .then(function(data) {
+          if (data) {
+            var urlParams = [
+              'formid=' + params.formid,
+              'type=' + params.type,
+              'responseid=' + data,
+              'iep=' + params.iep,
+              'frn=' + params.frn
+            ];
+
+            window.location.replace('/admin/formbuilder/students/studentform.html?' + urlParams.join('&'));
+          }
+
+          $('#alert_msg').hide();
           isSaving = false;
         });
     }
@@ -213,8 +194,6 @@ define(['jquery'], function($) {
         scope.formContent.archive = "force";
         scope.$digest();
       }
-
-      scope.$watch('formContent.response.id', responseUpdated);
     }
   });
 
