@@ -1,5 +1,5 @@
 require(['jquery', 'handlebars'], function($, Handlebars) {
-  var API_BASE_URL = 'https://pats.irondistrict.org/';
+  var API_BASE_URL = '/* @echo API_URL */';
   var checkboxes = '.forms-list-container input[type=checkbox]';
   var checkedCheckboxes = '.forms-list-container input[type=checkbox]:checked';
 
