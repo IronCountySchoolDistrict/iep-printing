@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<psExtension xmlns="http://www.powerschool.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.powerschool.com psextension.xsd">
+  <extensionname>U_SPED_IEP</extensionname>
+  <extendedTable coreTable="Students" dbTableName="u_sped_iep" childName="u_sped_iep" comment="Track IEPs for Students">
+    <field name="CASE_MANAGER" type="String" length="255" comment="SpEd Teacher (Teacher's name mirror SpEd Teacher field in SpEd 51)"/>
+    <field name="START_DATE" type="Date" comment="IEP Effective Date"/>
+    <field name="IS_ACTIVE" type="Boolean" defaultValue="0" comment="Mark this as an active IEP or not."/>
+    <field name="ACTIVATED_AT" type="Date" comment="Date at which IS_ACTIVE changed from 0 to 1."/>
+  </extendedTable>
+  <extendedTable coreTable="u_sped_iep" dbTableName="u_sped_iep_response" childName="u_sped_iep_response" comment="Link FormBuilder responses to student's IEPs.">
+    <field name="U_FB_FORM_RESPONSE_ID" type="Integer" comment="FormBuilder U_FB_FORM_RESPONSE.ID field"/>
+    <unique name="U_SPED_IEP_RESPONSE_UIDX1">
+      <unique-column name="U_FB_FORM_RESPONSE_ID"/>
+    </unique>
+  </extendedTable>
+</psExtension>

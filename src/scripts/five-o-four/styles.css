@@ -1,0 +1,65 @@
+/* styles here */
+div#content-main .forms-list-container {
+  margin-top: 20px;
+}
+div#content-main .forms-list-container button {
+  color: #fff;
+}
+div#content-main .forms-list-container button#btnPrintSelection {
+  display: none;
+  margin-bottom: 10px;
+}
+div#content-main .forms-list-container button#btnPrintSelection i.hide {
+  display: none;
+}
+/*div#content-main .forms-list-container .options-file {
+  display: none;
+}*/
+div#content-main .forms-list-container #btnToggleSelection {
+  display: none;
+}
+div#content-main .forms-list-container .row {
+  margin-left: 5px;
+  margin-right: 5px;
+}
+div#content-main .forms-list-container .forms-list {
+  margin-top: 15px;
+  margin-left: 10px;
+  width: 32%;
+  float: left;
+}
+div#content-main .forms-list-container .forms-list li {
+  list-style-type: none;
+  background: #f3f3f4;
+  border-left: 6px solid #e7eaec;
+  border-right: 6px solid #e7eaec;
+  border-radius: 4px;
+  color: inherit;
+  margin-bottom: 5px;
+  padding: 10px;
+}
+div#content-main .forms-list-container .forms-list li .form-name {
+  margin-left: 5px;
+  display: inline-block;
+  width: 90%;
+}
+div#content-main .forms-list-container .forms-list li .form-error {
+  color: #a94442;
+}
+div#content-main .forms-list-container .forms-list li.error {
+  border-color: #a94442;
+  border-top: 2px solid #a94442;
+  border-bottom: 2px solid #a94442;
+}
+div#content-main .forms-list-container .forms-list li.error .form-error {
+  margin-bottom: 5px;
+}
+@media (max-width: 767px) {
+  div#content-main .forms-list {
+    float: none;
+    width: 95%;
+  }
+}
+.icheckbox_square-blue {
+  float: left;
+}

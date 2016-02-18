@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>IEP Management</title>
+
+    <link rel="stylesheet" href="/images/css/screen.css" media="screen" charset="utf-8">
+    <link rel="stylesheet" href="/images/css/print.css" media="print" charset="utf-8">
+
+    ~[wc:commonscripts]
+  </head>
+  <body>
+    ~[wc:admin_header_frame_css]
+    <a href="/admin/home.html" target="_top">
+      &nbsp;~[text:psx.html.admin.home.start_page]
+    </a> &gt
+    <a href="home.html?selectstudent=nosearch" target="_top">
+      Student Selection
+    </a> &gt IEP Management
+
+    ~[wc:admin_navigation_frame_css]
+
+    <div class="row">
+      <div style="width: 50%; float: left">
+        ~[wc:title_student_begin_css]IEP Management~[wc:title_student_end_css]
+      </div>
+      <div>
+        <div style="float: right; margin: 70px 40px 0 0;">
+          <a href="/admin/students/iep/blank.html?frn=~(studentfrn)" target="_top">Print blank forms</a>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12">
+        
+        <iframe id="iep-frame" data-params="?frn=~[x:studentfrn]&user=~[x:users_dcid]" width="99%" style="border: none; min-height: 350px"></iframe>
+        <script type="text/javascript" src="/scripts/iep/index.js"></script>
+        <script type="text/javascript">
+          var SPACE_ABOVE_IFRAME = 239.1;
+          function iFrameResize() {
+            var winHeight = $j(window).height();
+            var iframeHeight = winHeight - SPACE_ABOVE_IFRAME;
+
+            $j('#iep-frame').css('height', iframeHeight + 'px');
+          }
+
+          $j(document).ready(function() {
+            $j(window).on('resize', iFrameResize);
+            iFrameResize();
+          });
+        </script>
+      </div>
+    </div>
+  </body>
+</html>
