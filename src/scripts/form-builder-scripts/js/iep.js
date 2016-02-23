@@ -125,6 +125,8 @@ define(['jquery'], function($) {
       }).then(status)
         .then(json)
         .then(function(data) {
+          localStorage.setItem('iep', params.iep);
+          
           if (data) {
             var urlParams = [
               'formid=' + params.formid,
