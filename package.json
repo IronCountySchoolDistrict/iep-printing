@@ -1,0 +1,29 @@
+{
+  "name": "iep-printing",
+  "version": "1.0.0",
+  "description": "iep-printing is a custom plugin for PowerSchool that works with [iep-printing-php](https://github.com/IronCountySchoolDistrict/iep-printing-php) to bring an IEP solution to PowerSchool. Track IEPs for students and Print [FormBuilder](http://www.accelaschool.com/formbuilder) forms.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IronCountySchoolDistrict/iep-printing.git"
+  },
+  "author": "Iron County School District",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/IronCountySchoolDistrict/iep-printing/issues"
+  },
+  "homepage": "https://github.com/IronCountySchoolDistrict/iep-printing#readme",
+  "dependencies": {
+    "babel": "^6.5.2",
+    "babel-cli": "^6.6.5",
+    "babel-register": "^6.7.2",
+    "gulp": "^3.9.1",
+    "gulp-ps-tasks": "^0.3.4"
+  },
+  "devDependencies": {
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.7.0"
+  }
+}

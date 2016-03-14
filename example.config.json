@@ -1,0 +1,14 @@
+{
+  "powerschool": {
+    "sams_url": "",
+    "api_url": "https://powerschool.yourdistrict.org/",
+    "deploy_credentials": {
+      "host": "127.0.0.1",
+      "user": "admin",
+      "pass": "secret",
+      "remotePath": "/powerschool/image/server/root"
+    }
+  },
+
+  "default_deploy_target": "powerschool"
+}
