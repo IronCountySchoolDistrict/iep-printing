@@ -120,13 +120,13 @@ define(['jquery'], function($) {
       console.log(body);
 
       window.fetch(API_BASE_URL + 'iep/update', {
-        method: 'post',
-        body: JSON.stringify(body)
-      }).then(status)
+          method: 'post',
+          body: JSON.stringify(body)
+        }).then(status)
         .then(json)
         .then(function(data) {
           localStorage.setItem('iep', params.iep);
-          
+
           if (data) {
             var urlParams = [
               'formid=' + params.formid,
@@ -181,28 +181,27 @@ define(['jquery'], function($) {
 
   angular.element(document).ready(function() {
     scope = angular.element(document).scope();
-    params = {
-      formid: queryString().formid,
-      type: queryString().type,
-      iep: queryString().iep,
-      iepResponse: queryString().responseid,
-      responseid: scope.formContent.response.id,
-      frn: queryString().frn,
-      subjectid: scope.formParams.subjectid
-    };
+    scope.$watch('formContent.response.id', (newValues, oldValues, scope) => {
+      params = {
+        formid: queryString().formid,
+        type: queryString().type,
+        iep: queryString().iep,
+        iepResponse: queryString().responseid,
+        responseid: scope.formContent.response.id,
+        frn: queryString().frn,
+        subjectid: scope.formParams.subjectid
+      };
 
-    if (params.iepResponse === "") {
-      if (scope.formContent.archive == "grade_level" && scope.formContent.response.id !== "") {
-        scope.formContent.archive = "force";
-        scope.$digest();
+      if (params.iepResponse === "") {
+        if ((scope.formContent.archive == "grade_level" || scope.formContent.archive == "response") && scope.formContent.response.id !== "") {
+          scope.formContent.archive = "force";
+          scope.$digest();
+        }
       }
-    }
-  });
 
-
-  $(document).ready(function() {
-    init();
-    readyForm();
+      init();
+      readyForm();
+    });
   });
 
   return function() {}
