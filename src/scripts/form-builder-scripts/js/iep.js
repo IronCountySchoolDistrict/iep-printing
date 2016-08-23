@@ -32,15 +32,14 @@ define(['jquery'], function($) {
       if (typeof queryString[pair[0]] === "undefined") {
         queryString[pair[0]] = decodeURIComponent(pair[1]);
       } else if (typeof queryString[pair[0]] === "string") {
-        var arr = [queryString[pair[0]], decodeURIComponent(pair[1])];
-        queryString[pair[1]] = arr;
+        queryString[pair[1]] = [queryString[pair[0]], decodeURIComponent(pair[1])];
       } else {
         queryString[pair[0]].push(decodeURIComponent(pair[1]));
       }
     }
 
     return queryString;
-  }
+  };
 
   var shouldBeReadOnly = function() {
     if (typeof iep.id === 'undefined') {
@@ -80,7 +79,7 @@ define(['jquery'], function($) {
     }
 
     return false;
-  }
+  };
 
   var setFormToReadOnly = function() {
     $('input').prop('disabled', true);
@@ -89,7 +88,7 @@ define(['jquery'], function($) {
     $('.form-footer .dropup.jumpto').remove();
 
     setTimeout(setFormToReadOnly, 1500);
-  }
+  };
 
   function init() {
     var urlParams = ['iep=' + params.iep, 'frn=' + params.frn];
@@ -195,13 +194,12 @@ define(['jquery'], function($) {
       if (params.iepResponse === "") {
         if ((scope.formContent.archive == "grade_level" || scope.formContent.archive == "response") && scope.formContent.response.id !== "") {
           scope.formContent.archive = "force";
-          scope.$digest();
         }
       }
 
       init();
       readyForm();
-    });
+    }, true);
   });
 
   return function() {}
