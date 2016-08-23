@@ -1,14 +1,18 @@
 <!-- begin iep-printing content -->
-<script src="/scripts/form-builder-scripts/js/ajax-helper.js"></script>
-
 <script>
 	require.config({
-		paths: {
+	  paths: {
+	    URI: 'https://cdnjs.cloudflare.com/ajax/libs/URI.js/1.18.0/URI',
+	    punycode: 'https://cdnjs.cloudflare.com/ajax/libs/URI.js/1.18.0/punycode',
+	    IPv6: 'https://cdnjs.cloudflare.com/ajax/libs/URI.js/1.18.0/IPv6',
+	    SecondLevelDomains: 'https://cdnjs.cloudflare.com/ajax/libs/URI.js/1.18.0/SecondLevelDomains',
 			fb: "/scripts/form-builder-scripts/js",
       fetch: "https://cdnjs.cloudflare.com/ajax/libs/fetch/1.0.0/fetch"
-		}
+	  }
 	});
 </script>
+
+<script src="/scripts/form-builder-scripts/js/ajax-helper.js"></script>
 
 <script id="rem-chars-template" type="x-handlebars-template">
 	<div id="rem-chars" class="alerttext" style="color: #333; float: left; text-align: left;"></div>
