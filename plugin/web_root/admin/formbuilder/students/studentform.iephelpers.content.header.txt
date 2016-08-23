@@ -4,7 +4,8 @@
 <script>
 	require.config({
 		paths: {
-			fb: "/scripts/form-builder-scripts/js"
+			fb: "/scripts/form-builder-scripts/js",
+      fetch: "https://cdnjs.cloudflare.com/ajax/libs/fetch/1.0.0/fetch"
 		}
 	});
 </script>
@@ -36,7 +37,7 @@
 					}
 
 					if (title.indexOf('IEP:') > -1) {
-						require(["fb/iep"], function(iep) {
+						require(["fb/iep", "fetch"], function(iep) {
 							iep();
 						});
 					}
