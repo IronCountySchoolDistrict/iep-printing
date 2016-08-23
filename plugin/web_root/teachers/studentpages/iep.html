@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>IEP Management</title>
+
+    <link rel="stylesheet" href="/images/css/screen.css" media="screen" charset="utf-8">
+    <link rel="stylesheet" href="/images/css/print.css" media="print" charset="utf-8">
+
+    ~[wc:commonscripts]
+    <SCRIPT LANGUAGE="JavaScript">
+<!-- Begin
+function formHandler(form){
+var URL = document.navigation.page.options[document.navigation.page.selectedIndex].value;
+window.location.href = URL;
+}
+// End -->
+</SCRIPT>
+  </head>
+  <body>
+   ~[wc:teachers_header_fr_css]
+
+   <form name="navigation">
+    <span class="account-photo">~[studenttitlephoto]</span>
+    <h1>IEP Management
+      <span class="nav-teacher">
+      <select name="page" size=1 onChange="javascript:formHandler()">
+        <option value="">~[text]psx.html.teachers_studentpages.logentry.select_screens[/text]
+          <option value="">--------------------~[x:teacherpages]</select>
+          </span>~[studentalert]~[wc:wcsd_teacher_student_alerts_css]</h1>
+<p>~(studentname) &nbsp; ~(grade_level) &nbsp; ~(student_number) &nbsp; &nbsp; ~[wc:teachers_student_alert_css] &nbsp; &nbsp; ~(studschoolabbr) &nbsp; &nbsp; ~[enrollmentstatus]</p>
+  </form>
+
+    <div class="row">
+
+      <div>
+        <div style="float: right; margin: 70px 40px 0 0;">
+          <a href="/teachers/iep/blank.html?frn=~(studentfrn)" target="_top">Print blank forms</a>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12">
+        
+        <iframe id="iep-frame" data-params="?frn=~[x:studentfrn]&user=~[x:users_dcid]&portal=teacher" width="99%" style="border: none; min-height: 350px"></iframe>
+        <script type="text/javascript" src="/scripts/iep/index.js"></script>
+        <script type="text/javascript">
+          var SPACE_ABOVE_IFRAME = 239.1;
+          function iFrameResize() {
+            var winHeight = $j(window).height();
+            var iframeHeight = winHeight - SPACE_ABOVE_IFRAME;
+
+            $j('#iep-frame').css('height', iframeHeight + 'px');
+          }
+
+          $j(document).ready(function() {
+            $j(window).on('resize', iFrameResize);
+            iFrameResize();
+          });
+        </script>
+      </div>
+    </div>
+    ~[wc:teachers_footer_fr_css]
+  </body>
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>IEP Printing</title>
+
+    <!-- styles -->
+    <link href="/images/css/screen.css" rel="stylesheet" media="screen">
+    <link href="/images/css/print.css" rel="stylesheet" media="print">
+    <link rel="stylesheet" href="/scripts/iep-printing/styles.css" media="screen" title="no title" charset="utf-8">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/iCheck/1.0.1/skins/square/blue.css" media="screen" title="no title" charset="utf-8">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.css" media="screen" title="no title" charset="utf-8">
+
+    <!-- scripts -- >
+    ~[wc:commonscripts]
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/iCheck/1.0.1/icheck.min.js"></script>
+
+  </head>
+  <body>
+    <!-- frame header nav -->
+    ~[wc:teachers_header_fr_css]
+
+   <form name="navigation">
+    <span class="account-photo">~[studenttitlephoto]</span>
+    <h1>Printable IEP Forms
+      <span class="nav-teacher">
+      <select name="page" size=1 onChange="javascript:formHandler()">
+        <option value="">~[text]psx.html.teachers_studentpages.logentry.select_screens[/text]
+          <option value="">--------------------~[x:teacherpages]</select>
+          </span>~[studentalert]~[wc:wcsd_teacher_student_alerts_css]</h1>
+<p>~(studentname) &nbsp; ~(grade_level) &nbsp; ~(student_number) &nbsp; &nbsp; ~[wc:teachers_student_alert_css] &nbsp; &nbsp; ~(studschoolabbr) &nbsp; &nbsp; ~[enrollmentstatus]</p>
+  </form>
+
+    <!-- main content -->
+    <div class="forms-list-container">
+      <div class="row">
+        <div class="pull-left">
+          ~[wc:title_student_begin_css]Print Blank Forms~[wc:title_student_end_css]
+        </div>
+
+        <div class="pull-right" style="margin-top: 20px; margin-right: 5px;">
+          <button id="btnPrintSelection" type="submit"><i class="fa fa-spinner fa-pulse fa-fw hide"></i> Print Selected</button>
+        </div>
+      </div>
+
+      <div class="row">
+        <a href="javascript:void(0)" id="btnToggleSelection">Select All</a>
+      </div>
+
+    <ul class="forms-list"></ul>
+    <ul class="forms-list"></ul>
+    <ul class="forms-list"></ul>
+
+    <div class="pull-right" style="margin-top: 20px; margin-right: 5px;">
+      <button id="btnPrintSelection" type="submit"><i class="fa fa-spinner fa-pulse fa-fw hide"></i> Print Selected</button>
+    </div>
+    </div>
+
+  <script type="text/x-handlebars-template" id="form-list-item-template">
+    <li>
+      <div class="form-error"></div>
+      <input type="checkbox" name="forms[]" value="{{form_id}}" data-form-type="{{type}}">
+      <div class="form-name"><span class="title">{{title}}</span> - {{desc}}</div>
+    </li>
+  </script>
+  <script type="text/javascript">
+    var forms = [
+      ~[tlist_sql;
+        SELECT
+          id,
+          form_title,
+          form_type,
+          description
+        FROM u_fb_form
+        WHERE publish = 'true';
+
+        ;nonemessage={}
+      ]
+
+      {
+        "form_id": ~(id),
+        "title": "~(form_title)",
+        "type": "~(form_type)",
+        "desc": "~(description)"
+      },
+
+      [/tlist_sql]{}
+    ];
+
+    forms.pop();
+    console.log(forms);
+  </script>
+  <script type="text/javascript" src="/scripts/iep/blank.js"></script>
+  </body>
+</html>

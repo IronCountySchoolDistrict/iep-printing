@@ -1,0 +1,64 @@
+<!-- begin iep-printing content -->
+<script>
+	require.config({
+	  paths: {
+	    URI: 'https://cdnjs.cloudflare.com/ajax/libs/URI.js/1.18.0/URI',
+	    punycode: 'https://cdnjs.cloudflare.com/ajax/libs/URI.js/1.18.0/punycode',
+	    IPv6: 'https://cdnjs.cloudflare.com/ajax/libs/URI.js/1.18.0/IPv6',
+	    SecondLevelDomains: 'https://cdnjs.cloudflare.com/ajax/libs/URI.js/1.18.0/SecondLevelDomains',
+			fb: "/scripts/form-builder-scripts/js",
+      fetch: "https://cdnjs.cloudflare.com/ajax/libs/fetch/1.0.0/fetch"
+	  }
+	});
+</script>
+
+<script src="/scripts/form-builder-scripts/js/ajax-helper.js"></script>
+
+<script id="rem-chars-template" type="x-handlebars-template">
+	<div id="rem-chars" class="alerttext" style="color: #333; float: left; text-align: left;"></div>
+</script>
+
+<script>
+	var userdcid = ~[x: users_dcid];
+	angular.element(document).ready(function() {
+		scope = angular.element(document).scope();
+
+		scope.$watch(
+			() => {
+				if (scope.formContent.title) return scope.formContent.title;
+			}, (title) => {
+				if (title) {
+					if (title === 'IEP: SpEd 6a1') {
+						require(["fb/form6a1"], function(form6a1) {
+							form6a1();
+						});
+					}
+
+					if (title === 'IEP: SpEd 51') {
+						require(["fb/form51"], function(form51) {
+							form51();
+						});
+					}
+
+					if (title.indexOf('IEP:') > -1) {
+						require(["fb/iep", "fetch"], function(iep) {
+							iep();
+						});
+					}
+				}
+			});
+
+		require(["fb/charcount"], function(charcount) {
+			charcount();
+		});
+	});
+</script>
+
+<style>
+	.element #rem-chars.alerttext {
+		color: #333;
+		float: none;
+		text-align: left;
+	}
+</style>
+<!-- end iep-printing content -->
