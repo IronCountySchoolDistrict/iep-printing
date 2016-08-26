@@ -1,11 +1,8 @@
-require.config({
-  paths: {
-    "five-o-four": '/scripts/five-o-four/five-o-four'
-  }
-});
+import $ from 'jquery';
+import Handlebars from 'handlebars';
+import Five from 'five-o-four';
 
-require(['jquery', 'handlebars', 'five-o-four'], function($, Handlebars, Five) {
-
+export default function() {
   $(document).ready(function() {
     // bindings
     $('#btnPrintSelection').on('click', printSelectedForms);
@@ -13,31 +10,31 @@ require(['jquery', 'handlebars', 'five-o-four'], function($, Handlebars, Five) {
 
     // initial ajax request for forms associated with the student with the latest response
     $.ajax({
-      url: "/admin/students/five-o-four/forms.json",
-      dataType: "json"
-    })
-    .done(function(forms) {
-      forms.pop();
+        url: "/admin/students/five-o-four/forms.json",
+        dataType: "json"
+      })
+      .done(function(forms) {
+        forms.pop();
 
-      if (forms.length > 0 && !$.isEmptyObject(forms[0])) {
-        $('#btnToggleSelection').show();
-        $.each(forms, function(index, form) {
-          var source = $('#form-list-item-template').html();
-          var template = Handlebars.compile(source);
-          var html = template(form);
+        if (forms.length > 0 && !$.isEmptyObject(forms[0])) {
+          $('#btnToggleSelection').show();
+          $.each(forms, function(index, form) {
+            var source = $('#form-list-item-template').html();
+            var template = Handlebars.compile(source);
+            var html = template(form);
 
-          var listNum = ((index % 3) + 1);
+            var listNum = ((index % 3) + 1);
 
-          $('.forms-list:nth-of-type('+listNum+')').append(html);
-        });
+            $('.forms-list:nth-of-type(' + listNum + ')').append(html);
+          });
 
-        Five.iCheck();
-      } else {
-        $('#btnToggleSelection').after(
-          '<p class="text-danger"> Sorry, no forms could be found for this student. </p>'
-        );
-      }
-    });
+          Five.iCheck();
+        } else {
+          $('#btnToggleSelection').after(
+            '<p class="text-danger"> Sorry, no forms could be found for this student. </p>'
+          );
+        }
+      });
 
     // action when print selection button is clicked
     function printSelectedForms() {
@@ -86,42 +83,42 @@ require(['jquery', 'handlebars', 'five-o-four'], function($, Handlebars, Five) {
           responses = JSON.stringify(responses);
 
           $.ajax({
-            url: Five.apiUrl + 'print-pdf',
-            method: "post",
-            data: {
-              responses: responses,
-              student: subjectid,
-              fileOption: $('input[name=fileOption]:checked').val(),
-              watermarkOption: $('input[name=watermarkOption]:checked').val()
-            }
-          })
-          .done(function(response) {
-            console.log(response);
-            if (response.file.length > 0) {
-              var win = window.open(Five.apiUrl + response.file, '_blank');
-              if (win) {
-                win.focus();
-              } else {
-                alert('ERROR: Please allow popups for this page.');
+              url: Five.apiUrl + 'print-pdf',
+              method: "post",
+              data: {
+                responses: responses,
+                student: subjectid,
+                fileOption: $('input[name=fileOption]:checked').val(),
+                watermarkOption: $('input[name=watermarkOption]:checked').val()
               }
-            }
-
-            if (response.error.length > 0) {
-              $.each(response.error, function(index, error) {
-                for (var formid in error) {
-                  var parentElement = $('input[data-form-id=' + formid + ']').parents('li');
-                  parentElement.addClass('error');
-                  parentElement.find('.form-error').text(error[formid]);
+            })
+            .done(function(response) {
+              console.log(response);
+              if (response.file.length > 0) {
+                var win = window.open(Five.apiUrl + response.file, '_blank');
+                if (win) {
+                  win.focus();
+                } else {
+                  alert('ERROR: Please allow popups for this page.');
                 }
-              });  
-            }
-          })
-          .fail(function(data) {
-            console.log('failure sending to php');
-            console.log(data);
-          }).always(function() {
-            togglePrintButtonState('enabled');
-          });
+              }
+
+              if (response.error.length > 0) {
+                $.each(response.error, function(index, error) {
+                  for (var formid in error) {
+                    var parentElement = $('input[data-form-id=' + formid + ']').parents('li');
+                    parentElement.addClass('error');
+                    parentElement.find('.form-error').text(error[formid]);
+                  }
+                });
+              }
+            })
+            .fail(function(data) {
+              console.log('failure sending to php');
+              console.log(data);
+            }).always(function() {
+              togglePrintButtonState('enabled');
+            });
         });
 
       } else {
@@ -169,4 +166,4 @@ require(['jquery', 'handlebars', 'five-o-four'], function($, Handlebars, Five) {
       }
     }
   });
-});
+}

@@ -32,9 +32,19 @@
     </div>
     <div class="row">
       <div class="col-xs-12">
-        
+
         <iframe id="iep-frame" data-params="?frn=~[x:studentfrn]&user=~[x:users_dcid]" width="99%" style="border: none; min-height: 350px"></iframe>
-        <script type="text/javascript" src="/scripts/iep/index.js"></script>
+        <script>
+          require.config({
+            paths: {
+              iepIndex: '/scripts/iep/index'
+            }
+          });
+
+          require(['iepIndex'], (iepIndex) => {
+            iepIndex.default();
+          })
+        </script>
         <script type="text/javascript">
           var SPACE_ABOVE_IFRAME = 239.1;
           function iFrameResize() {

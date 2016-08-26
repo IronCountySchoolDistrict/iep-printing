@@ -6,20 +6,25 @@
 	    punycode: 'https://cdnjs.cloudflare.com/ajax/libs/URI.js/1.18.0/punycode',
 	    IPv6: 'https://cdnjs.cloudflare.com/ajax/libs/URI.js/1.18.0/IPv6',
 	    SecondLevelDomains: 'https://cdnjs.cloudflare.com/ajax/libs/URI.js/1.18.0/SecondLevelDomains',
-			fb: "/scripts/form-builder-scripts/js",
-      fetch: "https://cdnjs.cloudflare.com/ajax/libs/fetch/1.0.0/fetch"
+			fb: '/scripts/form-builder-scripts/js',
+      fetch: 'https://cdnjs.cloudflare.com/ajax/libs/fetch/1.0.0/fetch',
+			ajaxHelper: '/scripts/form-builder-scripts/js/ajax-helper'
 	  }
 	});
 </script>
 
-<script src="/scripts/form-builder-scripts/js/ajax-helper.js"></script>
+<script>
+	require(['ajaxHelper'], (ajaxHelper) => {
+		ajaxHelper.default();
+	});
+</script>
 
 <script id="rem-chars-template" type="x-handlebars-template">
 	<div id="rem-chars" class="alerttext" style="color: #333; float: left; text-align: left;"></div>
 </script>
 
 <script>
-	var userdcid = ~[x: users_dcid];
+	var userdcid = ~[x:users_dcid];
 	angular.element(document).ready(function() {
 		scope = angular.element(document).scope();
 
@@ -30,26 +35,26 @@
 				if (title) {
 					if (title === 'IEP: SpEd 6a1') {
 						require(["fb/form6a1"], function(form6a1) {
-							form6a1();
+							form6a1.default();
 						});
 					}
 
 					if (title === 'IEP: SpEd 51') {
 						require(["fb/form51"], function(form51) {
-							form51();
+							form51.default();
 						});
 					}
 
 					if (title.indexOf('IEP:') > -1) {
 						require(["fb/iep", "fetch"], function(iep) {
-							iep();
+							iep.default();
 						});
 					}
 				}
 			});
 
 		require(["fb/charcount"], function(charcount) {
-			charcount();
+			charcount.default();
 		});
 	});
 </script>

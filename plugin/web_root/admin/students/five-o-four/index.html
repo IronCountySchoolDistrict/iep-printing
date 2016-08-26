@@ -78,6 +78,17 @@
         <div class="form-name">{{title}} - {{desc}}</div>
       </li>
     </script>
-    <script type="text/javascript" src="/scripts/five-o-four/index.js"></script>
+    <script>
+      require.config({
+        paths: {
+          'five-o-four': '/scripts/five-o-four/five-o-four',
+          'index': '/scripts/five-o-four/index'
+        }
+      });
+
+      require(['index'], (index) => {
+        index.default();
+      });
+    </script>
   </body>
 </html>

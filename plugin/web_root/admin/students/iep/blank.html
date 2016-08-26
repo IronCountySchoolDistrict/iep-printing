@@ -87,6 +87,17 @@
     forms.pop();
     console.log(forms);
   </script>
-  <script type="text/javascript" src="/scripts/iep/blank.js"></script>
+
+  <script>
+    require.config({
+      paths: {
+        'blank': '/scripts/iep/blank'
+      }
+    });
+
+    require(['blank'], (blank) => {
+      blank.default();
+    });
+  </script>
   </body>
 </html>

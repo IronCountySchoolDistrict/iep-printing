@@ -1,55 +1,62 @@
-require(['jquery', 'handlebars'], function($, Handlebars) {
-  var API_BASE_URL = '/* @echo API_URL */';
-  var checkboxes = '.forms-list-container input[type=checkbox]';
-  var checkedCheckboxes = '.forms-list-container input[type=checkbox]:checked';
+import $ from 'jquery';
+import Handlerbars from 'handlebars';
 
+var API_BASE_URL = '/* @echo API_URL */';
+var checkboxes = '.forms-list-container input[type=checkbox]';
+var checkedCheckboxes = '.forms-list-container input[type=checkbox]:checked';
+
+export default function() {
   $(document).ready(function() {
     loadForms();
     $('button[type=submit]').on('click', printSelectedForms);
   });
+}
 
-  function iCheck() {
-    $(checkboxes).iCheck({
-      checkboxClass: 'icheckbox_square-blue',
-      radioClass: 'iradio_square-blue'
-    });
+function iCheck() {
+  $(checkboxes).iCheck({
+    checkboxClass: 'icheckbox_square-blue',
+    radioClass: 'iradio_square-blue'
+  });
 
-    $(checkboxes).on('ifChanged', inputWatcher);
+  $(checkboxes).on('ifChanged', inputWatcher);
+}
+
+function toggleSelect(event) {
+  if ($(event.target).text() == 'Select All') {
+    $(checkboxes).iCheck('check');
+  } else {
+    $(checkboxes).iCheck('uncheck');
+  }
+}
+
+function inputWatcher(event) {
+  if ($(checkedCheckboxes).length < 1) {
+    $('#btnToggleSelection').text('Select All');
+    $('button[type=submit]').hide();
+  } else {
+    $('button[type=submit]').show();
   }
 
-  function toggleSelect(event) {
-    if ($(event.target).text() == 'Select All') {
-      $(checkboxes).iCheck('check');
-    } else {
-      $(checkboxes).iCheck('uncheck');
-    }
+  if ($(checkedCheckboxes).length > 1) {
+    $('.options-file').show();
+  } else {
+    $('.options-file').hide();
   }
 
-  function inputWatcher(event) {
-    if ($(checkedCheckboxes).length < 1) {
-      $('#btnToggleSelection').text('Select All');
-      $('button[type=submit]').hide();
-    } else {
-      $('button[type=submit]').show();
-    }
-
-    if ($(checkedCheckboxes).length > 1) {
-      $('.options-file').show();
-    } else {
-      $('.options-file').hide();
-    }
-
-    if ($(checkedCheckboxes).length == $(checkboxes).length) {
-      $('#btnToggleSelection').text('Select None');
-    }
+  if ($(checkedCheckboxes).length == $(checkboxes).length) {
+    $('#btnToggleSelection').text('Select None');
   }
+}
 
-  function loadForms() {
-    $.ajax({
+function loadForms() {
+  $.ajax({
       url: API_BASE_URL + 'get-blanks',
       type: 'POST',
       dataType: 'json',
-      data: {forms: JSON.stringify(forms), action: 'getBlanks'},
+      data: {
+        forms: JSON.stringify(forms),
+        action: 'getBlanks'
+      },
     })
     .done(function(response) {
       if (response.length > 0) {
@@ -62,7 +69,7 @@ require(['jquery', 'handlebars'], function($, Handlebars) {
 
           var listNum = ((index % 3) + 1);
 
-          $('.forms-list:nth-of-type('+listNum+')').append(html);
+          $('.forms-list:nth-of-type(' + listNum + ')').append(html);
         });
 
         iCheck();
@@ -74,34 +81,37 @@ require(['jquery', 'handlebars'], function($, Handlebars) {
       console.log(error);
       $('#btnToggleSelection').after('<p> Sorry, thre was an error communicating with the server. </p>');
     });
+}
+
+function printSelectedForms(event) {
+  // make sure there are checked forms
+  if ($(checkedCheckboxes).length < 1) {
+    alert('There are no forms selected.'); // TODO: might want to change how to notify
+    return;
   }
 
-  function printSelectedForms(event) {
-    // make sure there are checked forms
-    if ($(checkedCheckboxes).length < 1) {
-      alert('There are no forms selected.'); // TODO: might want to change how to notify
-      return;
-    }
+  var selected = [];
 
-    var selected = [];
-
-    $(checkedCheckboxes).each(function(index, form) {
-      selected.push({
-        id: $(form).val(),
-        title: $(form).parents('li').find('.title').text()
-      });
+  $(checkedCheckboxes).each(function(index, form) {
+    selected.push({
+      id: $(form).val(),
+      title: $(form).parents('li').find('.title').text()
     });
+  });
 
-    console.log(JSON.stringify(selected));
+  console.log(JSON.stringify(selected));
 
-    if (selected.length > 0) {
-      togglePrintButtonState('disabled');
+  if (selected.length > 0) {
+    togglePrintButtonState('disabled');
 
-      $.ajax({
+    $.ajax({
         url: API_BASE_URL + 'print-blanks',
         type: 'POST',
         dataType: 'json',
-        data: {forms: JSON.stringify(selected), action: 'printBlanks'},
+        data: {
+          forms: JSON.stringify(selected),
+          action: 'printBlanks'
+        },
       })
       .done(function(response) {
         console.log(response);
@@ -115,10 +125,10 @@ require(['jquery', 'handlebars'], function($, Handlebars) {
         }
 
         for (var key in response.error) {
-          var parentElement = $('input[value='+key+']').parents('li');
-                parentElement.addClass('error');
-                parentElement.find('.form-error').text(response.error[key]);
-              }
+          var parentElement = $('input[value=' + key + ']').parents('li');
+          parentElement.addClass('error');
+          parentElement.find('.form-error').text(response.error[key]);
+        }
       })
       .fail(function(data) {
         console.log('Error');
@@ -128,18 +138,17 @@ require(['jquery', 'handlebars'], function($, Handlebars) {
         togglePrintButtonState('enabled');
       });
 
-    } else {
-      alert('ERROR: selected form\'s data could not be collected');
-    }
+  } else {
+    alert('ERROR: selected form\'s data could not be collected');
   }
+}
 
-  function togglePrintButtonState(state) {
-    if (state == 'disabled') {
-      $('#btnPrintSelection').prop('disabled', true);
-      $('#btnPrintSelection i').removeClass('hide');
-    } else {
-      $('#btnPrintSelection').prop('disabled', false);
-      $('#btnPrintSelection i').addClass('hide');
-    }
+function togglePrintButtonState(state) {
+  if (state == 'disabled') {
+    $('#btnPrintSelection').prop('disabled', true);
+    $('#btnPrintSelection i').removeClass('hide');
+  } else {
+    $('#btnPrintSelection').prop('disabled', false);
+    $('#btnPrintSelection i').addClass('hide');
   }
-});
+}

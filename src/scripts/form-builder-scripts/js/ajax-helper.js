@@ -14,15 +14,17 @@ function shouldInsertResponseId(openParams, windowParams) {
   );
 }
 
-((open) => {
-  XMLHttpRequest.prototype.open = function(method, url, async, user, pass) {
-    var openUri = new URI(url);
-    var windowUri = new URI(window.location);
-    var openParams = openUri.search(true);
-    var windowParams = windowUri.search(true);
-    if (shouldInsertResponseId(openParams, windowParams)) {
-      openUri.setSearch('responseid', windowParams.responseid);
+export default function() {
+  ((open) => {
+    XMLHttpRequest.prototype.open = function(method, url, async, user, pass) {
+      var openUri = new URI(url);
+      var windowUri = new URI(window.location);
+      var openParams = openUri.search(true);
+      var windowParams = windowUri.search(true);
+      if (shouldInsertResponseId(openParams, windowParams)) {
+        openUri.setSearch('responseid', windowParams.responseid);
+      }
+      open.call(this, method, openUri.toString(), async, user, pass);
     }
-    open.call(this, method, openUri.toString(), async, user, pass);
-  }
-})(XMLHttpRequest.prototype.open);
+  })(XMLHttpRequest.prototype.open);
+}

@@ -1,4 +1,6 @@
-require(['jquery'], function($) {
+import $ from 'jquery';
+
+export default function() {
   $(document).ready(function() {
     $('.linkDescList tr td a').each(function(index, element) {
       var text = $(element).text();
@@ -7,4 +9,4 @@ require(['jquery'], function($) {
       }
     });
   });
-});
+}
