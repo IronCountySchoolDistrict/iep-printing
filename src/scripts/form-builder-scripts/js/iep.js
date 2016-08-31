@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import URI from 'URI';
 
 var API_BASE_URL = '/* @echo API_URL */';
 var fieldSelector = '';
@@ -177,6 +178,24 @@ function removeCogWheel() {
   setTimeout(removeCogWheel, intervalTime);
 }
 
+/**
+ * Starting in FormBuilder 3.0.4, the studentform page alerts the user that they
+ * are leaving the current page. After the initial response is created, we navigate the
+ * browser to the studentform.html page with the new response's id. This function
+ * nullifies the global "alert" function so we can seamlessly navigate to the studentform.html
+ * page.
+ * @return {null}
+ */
+function unbindBeforeUnload() {
+  const currentUri = new URI(window.location);
+  const currentParams = currentUri.search(true);
+  const responseIdParam = currentParams.responseid;
+  if (!responseIdParam) {
+    // only unbind beforeunload if the responseid query param is empty
+    $(window).unbind('beforeunload');
+  }
+}
+
 export default function() {
   angular.element(document).ready(function() {
     scope = angular.element(document).scope();
@@ -199,6 +218,7 @@ export default function() {
 
       init();
       readyForm();
+      unbindBeforeUnload();
     }, true);
   });
 }
