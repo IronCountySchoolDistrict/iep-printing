@@ -1,12 +1,12 @@
 import $ from 'jquery';
 import Handlebars from 'handlebars';
-import Five from 'five-o-four';
+import { toggleSelect, iCheck, checkedCheckboxes, apiUrl } from 'five-o-four';
 
 export default function() {
   $(document).ready(function() {
     // bindings
     $('#btnPrintSelection').on('click', printSelectedForms);
-    $('#btnToggleSelection').on('click', Five.toggleSelect);
+    $('#btnToggleSelection').on('click', toggleSelect);
 
     // initial ajax request for forms associated with the student with the latest response
     $.ajax({
@@ -28,7 +28,7 @@ export default function() {
             $('.forms-list:nth-of-type(' + listNum + ')').append(html);
           });
 
-          Five.iCheck();
+          iCheck();
         } else {
           $('#btnToggleSelection').after(
             '<p class="text-danger"> Sorry, no forms could be found for this student. </p>'
@@ -39,14 +39,14 @@ export default function() {
     // action when print selection button is clicked
     function printSelectedForms() {
       // make sure there are checked forms
-      if ($(Five.checkedCheckboxes).length < 1) {
+      if ($(checkedCheckboxes).length < 1) {
         alert('There are no forms selected.'); // TODO: might want to change how to notify
         return;
       }
 
       var selected = [];
 
-      $(Five.checkedCheckboxes).each(function(index, form) {
+      $(checkedCheckboxes).each(function(index, form) {
         selected.push({
           frn: frn,
           subjectid: subjectid,
@@ -83,7 +83,7 @@ export default function() {
           responses = JSON.stringify(responses);
 
           $.ajax({
-              url: Five.apiUrl + 'print-pdf',
+              url: apiUrl + 'print-pdf',
               method: "post",
               data: {
                 responses: responses,
@@ -95,7 +95,7 @@ export default function() {
             .done(function(response) {
               console.log(response);
               if (response.file.length > 0) {
-                var win = window.open(Five.apiUrl + response.file, '_blank');
+                var win = window.open(apiUrl + response.file, '_blank');
                 if (win) {
                   win.focus();
                 } else {
