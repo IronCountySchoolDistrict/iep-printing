@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import Handlerbars from 'handlebars';
+import {compile} from 'handlebars';
 
 var API_BASE_URL = '/* @echo API_URL */';
 var checkboxes = '.forms-list-container input[type=checkbox]';
@@ -13,10 +13,7 @@ export default function() {
 }
 
 function iCheck() {
-  $(checkboxes).iCheck({
-    checkboxClass: 'icheckbox_square-blue',
-    radioClass: 'iradio_square-blue'
-  });
+  $(checkboxes).iCheck({checkboxClass: 'icheckbox_square-blue', radioClass: 'iradio_square-blue'});
 
   $(checkboxes).on('ifChanged', inputWatcher);
 }
@@ -50,37 +47,35 @@ function inputWatcher(event) {
 
 function loadForms() {
   $.ajax({
-      url: API_BASE_URL + 'get-blanks',
-      type: 'POST',
-      dataType: 'json',
-      data: {
-        forms: JSON.stringify(forms),
-        action: 'getBlanks'
-      },
-    })
-    .done(function(response) {
-      if (response.length > 0) {
-        $('#btnToggleSelection').show();
-        $('#btnToggleSelection').on('click', toggleSelect);
-        $.each(response, function(index, form) {
-          var source = $('#form-list-item-template').html();
-          var template = Handlebars.compile(source);
-          var html = template(form);
+    url: API_BASE_URL + 'get-blanks',
+    type: 'POST',
+    dataType: 'json',
+    data: {
+      forms: JSON.stringify(forms),
+      action: 'getBlanks'
+    }
+  }).done(function(response) {
+    if (response.length > 0) {
+      $('#btnToggleSelection').show();
+      $('#btnToggleSelection').on('click', toggleSelect);
+      $.each(response, function(index, form) {
+        var source = $('#form-list-item-template').html();
+        var template = compile(source);
+        var html = template(form);
 
-          var listNum = ((index % 3) + 1);
+        var listNum = ((index % 3) + 1);
 
-          $('.forms-list:nth-of-type(' + listNum + ')').append(html);
-        });
+        $('.forms-list:nth-of-type(' + listNum + ')').append(html);
+      });
 
-        iCheck();
-      } else {
-        $('#btnToggleSelection').after('<p> Sorry, there are no printable blank forms right now. </p>');
-      }
-    })
-    .fail(function(error) {
-      console.log(error);
-      $('#btnToggleSelection').after('<p> Sorry, thre was an error communicating with the server. </p>');
-    });
+      iCheck();
+    } else {
+      $('#btnToggleSelection').after('<p> Sorry, there are no printable blank forms right now. </p>');
+    }
+  }).fail(function(error) {
+    console.log(error);
+    $('#btnToggleSelection').after('<p> Sorry, there was an error communicating with the server. </p>');
+  });
 }
 
 function printSelectedForms(event) {
@@ -93,10 +88,7 @@ function printSelectedForms(event) {
   var selected = [];
 
   $(checkedCheckboxes).each(function(index, form) {
-    selected.push({
-      id: $(form).val(),
-      title: $(form).parents('li').find('.title').text()
-    });
+    selected.push({id: $(form).val(), title: $(form).parents('li').find('.title').text()});
   });
 
   console.log(JSON.stringify(selected));
@@ -105,38 +97,35 @@ function printSelectedForms(event) {
     togglePrintButtonState('disabled');
 
     $.ajax({
-        url: API_BASE_URL + 'print-blanks',
-        type: 'POST',
-        dataType: 'json',
-        data: {
-          forms: JSON.stringify(selected),
-          action: 'printBlanks'
-        },
-      })
-      .done(function(response) {
-        console.log(response);
-        if (response.file.length > 0) {
-          var win = window.open(API_BASE_URL + response.file, '_blank');
-          if (win) {
-            win.focus();
-          } else {
-            alert('ERROR: Please allow popups for this page.');
-          }
+      url: API_BASE_URL + 'print-blanks',
+      type: 'POST',
+      dataType: 'json',
+      data: {
+        forms: JSON.stringify(selected),
+        action: 'printBlanks'
+      }
+    }).done(function(response) {
+      console.log(response);
+      if (response.file.length > 0) {
+        var win = window.open(API_BASE_URL + response.file, '_blank');
+        if (win) {
+          win.focus();
+        } else {
+          alert('ERROR: Please allow popups for this page.');
         }
+      }
 
-        for (var key in response.error) {
-          var parentElement = $('input[value=' + key + ']').parents('li');
-          parentElement.addClass('error');
-          parentElement.find('.form-error').text(response.error[key]);
-        }
-      })
-      .fail(function(data) {
-        console.log('Error');
-        console.log(data);
-      })
-      .always(function() {
-        togglePrintButtonState('enabled');
-      });
+      for (var key in response.error) {
+        var parentElement = $('input[value=' + key + ']').parents('li');
+        parentElement.addClass('error');
+        parentElement.find('.form-error').text(response.error[key]);
+      }
+    }).fail(function(data) {
+      console.log('Error');
+      console.log(data);
+    }).always(function() {
+      togglePrintButtonState('enabled');
+    });
 
   } else {
     alert('ERROR: selected form\'s data could not be collected');
