@@ -4,10 +4,12 @@ import URI from 'URI';
 var API_BASE_URL = '/* @echo API_URL */';
 var fieldSelector = '';
 var intervalTime = 1000;
+var iepUpdateBound = false;
 var isSaving = false;
 var scope;
 var params;
 var iep;
+var watchSubmitTimeout;
 
 function status(response) {
   if (response.status >= 200 && response.status < 300) {
@@ -32,7 +34,10 @@ var queryString = function() {
     if (typeof queryString[pair[0]] === "undefined") {
       queryString[pair[0]] = decodeURIComponent(pair[1]);
     } else if (typeof queryString[pair[0]] === "string") {
-      queryString[pair[1]] = [queryString[pair[0]], decodeURIComponent(pair[1])];
+      queryString[pair[1]] = [
+        queryString[pair[0]],
+        decodeURIComponent(pair[1])
+      ];
     } else {
       queryString[pair[0]].push(decodeURIComponent(pair[1]));
     }
@@ -91,59 +96,64 @@ var setFormToReadOnly = function() {
 };
 
 function init() {
-  var urlParams = ['iep=' + params.iep, 'frn=' + params.frn];
-  window.fetch(API_BASE_URL + 'iep/data?' + urlParams.join('&'))
-    .then(status)
-    .then(json)
-    .then(function(response) {
-      iep = response;
+  var urlParams = [
+    'iep=' + params.iep,
+    'frn=' + params.frn
+  ];
+  window.fetch(API_BASE_URL + 'iep/data?' + urlParams.join('&')).then(status).then(json).then(function(response) {
+    iep = response;
 
-      if (shouldBeReadOnly()) {
-        setFormToReadOnly();
-      }
+    if (shouldBeReadOnly()) {
+      setFormToReadOnly();
+    }
+  });
+  watchSubmit();
+}
 
-      watchSubmit();
-    });
+function attachIep() {
+  $('.confirm').attr('disabled', '');
+  var body = {
+    studentid: params.subjectid,
+    iep: iep.id,
+    formid: params.formid,
+    userdcid: userdcid,
+    responseid: params.iepResponse
+  };
+  console.log(body);
+
+  window.fetch(API_BASE_URL + 'iep/update', {
+    method: 'post',
+    body: JSON.stringify(body)
+  }).then(status).then(json).then(function(data) {
+    localStorage.setItem('iep', params.iep);
+    debugger;
+    if (data) {
+      var urlParams = [
+        'formid=' + params.formid,
+        'type=' + params.type,
+        'responseid=' + data,
+        'iep=' + params.iep,
+        'frn=' + params.frn
+      ];
+
+      window.location.replace('/admin/formbuilder/students/studentform.html?' + urlParams.join('&'));
+    } else {
+      $('.confirm').removeAttr('disabled');
+    }
+
+    $('#alert_msg').hide();
+  });
 }
 
 function watchSubmit() {
-  if ($('#alert_msg').is(':visible') && !isSaving && $('#alert_msg').hasClass('feedback-confirm')) {
-    isSaving = true;
-    var body = {
-      studentid: params.subjectid,
-      iep: iep.id,
-      formid: params.formid,
-      userdcid: userdcid,
-      responseid: params.iepResponse
-    };
-    console.log(body);
-
-    window.fetch(API_BASE_URL + 'iep/update', {
-        method: 'post',
-        body: JSON.stringify(body)
-      }).then(status)
-      .then(json)
-      .then(function(data) {
-        localStorage.setItem('iep', params.iep);
-
-        if (data) {
-          var urlParams = [
-            'formid=' + params.formid,
-            'type=' + params.type,
-            'responseid=' + data,
-            'iep=' + params.iep,
-            'frn=' + params.frn
-          ];
-
-          window.location.replace('/admin/formbuilder/students/studentform.html?' + urlParams.join('&'));
-        }
-
-        $('#alert_msg').hide();
-        isSaving = false;
-      });
+  if ($('.sweet-alert').is(':visible') && !iepUpdateBound && $('.sweet-alert').hasClass('visible')) {
+    iepUpdateBound = true;
+    attachIep();
   }
-
-  setTimeout(watchSubmit, 4000);
+  if (iepUpdateBound) {
+    clearTimeout(watchSubmitTimeout);
+  }
+  watchSubmitTimeout = setTimeout(watchSubmit, 200);
 }
 
 function getResponseValue(className) {
