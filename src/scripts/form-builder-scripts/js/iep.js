@@ -126,7 +126,6 @@ function attachIep() {
     body: JSON.stringify(body)
   }).then(status).then(json).then(function(data) {
     localStorage.setItem('iep', params.iep);
-    debugger;
     if (data) {
       var urlParams = [
         'formid=' + params.formid,
