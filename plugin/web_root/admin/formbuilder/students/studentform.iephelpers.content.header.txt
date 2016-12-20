@@ -2,14 +2,15 @@
 <script>
 	require.config({
 	  paths: {
-		studentformLoader: '/scripts/form-builder-scripts/js/studentform-loader',
-	    URI: 'https://cdnjs.cloudflare.com/ajax/libs/URI.js/1.18.0/URI',
-	    punycode: 'https://cdnjs.cloudflare.com/ajax/libs/URI.js/1.18.0/punycode',
-	    IPv6: 'https://cdnjs.cloudflare.com/ajax/libs/URI.js/1.18.0/IPv6',
-	    SecondLevelDomains: 'https://cdnjs.cloudflare.com/ajax/libs/URI.js/1.18.0/SecondLevelDomains',
-		fb: '/scripts/form-builder-scripts/js',
-      	fetch: 'https://cdnjs.cloudflare.com/ajax/libs/fetch/1.0.0/fetch',
-		ajaxHelper: '/scripts/form-builder-scripts/js/ajax-helper'
+      studentformLoader: '/scripts/form-builder-scripts/js/studentform-loader',
+			URI: 'https://cdnjs.cloudflare.com/ajax/libs/URI.js/1.18.0/URI',
+			punycode: 'https://cdnjs.cloudflare.com/ajax/libs/URI.js/1.18.0/punycode',
+			IPv6: 'https://cdnjs.cloudflare.com/ajax/libs/URI.js/1.18.0/IPv6',
+			SecondLevelDomains: 'https://cdnjs.cloudflare.com/ajax/libs/URI.js/1.18.0/SecondLevelDomains',
+			fb: '/scripts/form-builder-scripts/js',
+			fetch: 'https://cdnjs.cloudflare.com/ajax/libs/fetch/1.0.0/fetch',
+			ajaxHelper: '/scripts/form-builder-scripts/js/ajax-helper',
+			arrive: '/scripts/form-builder-scripts/ext/arrive.min'
 	  }
 	});
 </script>

@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import URI from 'URI';
+import arrive from 'arrive';
 
 var API_BASE_URL = '/* @echo API_URL */';
 var fieldSelector = '';
@@ -9,7 +10,6 @@ var isSaving = false;
 var scope;
 var params;
 var iep;
-var watchSubmitTimeout;
 
 function status(response) {
   if (response.status >= 200 && response.status < 300) {
@@ -107,7 +107,9 @@ function init() {
       setFormToReadOnly();
     }
   });
-  watchSubmit();
+  $(document).arrive('.sweet-alert', () => {
+    attachIep();
+  });
 }
 
 function attachIep() {
@@ -142,17 +144,6 @@ function attachIep() {
 
     $('#alert_msg').hide();
   });
-}
-
-function watchSubmit() {
-  if ($('.sweet-alert').is(':visible') && !iepUpdateBound && $('.sweet-alert').hasClass('visible')) {
-    iepUpdateBound = true;
-    attachIep();
-  }
-  if (iepUpdateBound) {
-    clearTimeout(watchSubmitTimeout);
-  }
-  watchSubmitTimeout = setTimeout(watchSubmit, 200);
 }
 
 function getResponseValue(className) {
