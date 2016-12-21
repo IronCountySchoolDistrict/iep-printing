@@ -1705,7 +1705,7 @@ gulp-preprocess@^2.0.0:
     map-stream "0.1.x"
     preprocess "^3.0.0"
 
-gulp-ps-tasks@^0.6.2:
+gulp-ps-tasks@0.6.2:
   version "0.6.2"
   resolved "https://registry.yarnpkg.com/gulp-ps-tasks/-/gulp-ps-tasks-0.6.2.tgz#2b97c618fc91904b6981662d4664068ed180f8fd"
   dependencies:
