@@ -56,8 +56,20 @@ var shouldBeReadOnly = function() {
     console.log('is has been activated but is no longer active');
     return true;
   }
+  
+  // If IEP has a start_date, base our expiration check on that.
+  // If IEP does not have a start_date, base it on when the "Activate this IEP" link was clicked.
+  if (iep.start_date) {
+    var now = new Date();
+    var expires = new Date(iep.start_date);
+    expires.setYear(expires.getFullYear() + 1); // add a year
+    expires.setDate(expires.getDate() - 1); // minus a day
 
-  if (iep.activated_at) {
+    if (now.getTime() > expires.getTime()) {
+      console.log('this IEP has expired');
+      return true;
+    }
+  } else if (iep.activated_at) {
     var now = new Date();
     var expires = new Date(iep.activated_at);
     expires.setYear(expires.getFullYear() + 1); // add a year
