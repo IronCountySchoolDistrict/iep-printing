@@ -11,7 +11,8 @@
 			fetch: 'https://cdnjs.cloudflare.com/ajax/libs/fetch/1.0.0/fetch',
 			ajaxHelper: '/scripts/form-builder-scripts/js/ajax-helper',
 			arrive: '/scripts/form-builder-scripts/ext/arrive.min'
-	  }
+	  },
+	  urlArgs: ''
 	});
 </script>
 
