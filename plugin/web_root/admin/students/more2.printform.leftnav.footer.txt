@@ -1,7 +1,7 @@
 <script>
 
   require(['jquery'], function($) {
-    $('#std_information a:contains(Forms)').parent().after(
+    $('#std_information').prepend(
       '<li><a href="iep/index.html?frn=~(studentfrn)">IEP Management</a></li>' +
       '<li><a href="five-o-four/index.html?frn=~(studentfrn)">504 Printing</a></li>'
     );
